@@ -31,7 +31,17 @@ const bookController = (Book) => {
       if (err) {
         res.status(500).send(err);
       } else {
-        res.json(books);
+        // add hypermedia to returned object
+        let returnBooks = [];
+        books.forEach((book) => {
+          const newBook = book.toJSON();
+          newBook.links = {
+            self: 'http://' + req.headers.host + '/api/books/' + newBook._id
+          };
+          returnBooks.push(newBook);
+        });
+
+        res.json(returnBooks);
       }
     });
   }

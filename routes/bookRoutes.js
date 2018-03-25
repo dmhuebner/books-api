@@ -24,7 +24,14 @@ const routes = (Book) => {
 
   bookRouter.route('/:bookId')
     .get((req, res) => {
-      res.json(req.book);
+      // add hypermedia to returned object
+      const returnBook = req.book.toJSON();
+      const filterByGenreLink = 'http://' + req.headers.host + '/api/books?genre=' + returnBook.genre;
+      returnBook.links = {
+        FilterByGenre: filterByGenreLink.replace(' ', '%20')
+      };
+
+      res.json(returnBook);
     })
     .put((req, res) => {
       req.book.title = req.body.title;
