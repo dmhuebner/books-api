@@ -12,50 +12,12 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-const bookRouter = express.Router();
+bookRouter = require('./routes/bookRoutes')(Book);
 
-bookRouter.route('/Books')
-  .post((req, res) => {
-    const book = new Book(req.body);
-
-    book.save().then(() => {
-      res.status(201).send(book);
-    }).catch((err) => {
-      res.status(400).send(err);
-    });
-  })
-  .get((req, res) => {
-    const query = {};
-
-    // limit query to genre
-    if (req.query.genre) {
-      query.genre = req.query.genre;
-    }
-
-    Book.find(query, (err, books) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.json(books);
-      }
-    });
-  });
-
-bookRouter.route('/Books/:bookId')
-  .get((req, res) => {
-    Book.findById(req.params.bookId, (err, book) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.json(book);
-      }
-    });
-  });
-
-app.use('/api', bookRouter);
+app.use('/api/books', bookRouter);
 
 app.get('/', (req, res) => {
-  res.send('Welcome to my API!');
+  res.send('Welcome to the Books API!');
 });
 
 app.listen(port, () => {
