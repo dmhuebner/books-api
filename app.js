@@ -1,6 +1,9 @@
 const express = require('express'),
       mongoose = require('mongoose'),
-      bodyParser = require('body-parser');
+      bodyParser = require('body-parser'),
+      chalk = require('chalk'),
+      debug = require('debug')('app'),
+      morgan = require('morgan');
 
 let db;
 
@@ -15,10 +18,11 @@ const Book = require('./models/book');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-bookRouter = require('./routes/bookRoutes')(Book);
+const bookRouter = require('./routes/bookRoutes')(Book);
 
 app.use('/api/books', bookRouter);
 
@@ -27,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log('Books API is running on PORT: ' + port);
+  debug(`Books API is running on PORT: ${chalk.green(port)}`);
 });
 
 module.exports = app;
