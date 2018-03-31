@@ -7,8 +7,8 @@ const express = require('express'),
 
 let db;
 
-if (process.env.ENV === 'test') {
-  db = mongoose.connect('mongodb://localhost/bookAPI_test');
+if (process.env.ENV === 'unit-test') {
+  db = mongoose.connect('mongodb://localhost/bookAPI_unitTest');
 } else {
   db = mongoose.connect('mongodb://localhost/bookAPI');
 }

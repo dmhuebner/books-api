@@ -19,7 +19,7 @@ gulp.task('start', () => {
 });
 
 gulp.task('test', () => {
-  env({vars: {ENV: 'test'}});
+  env({vars: {ENV: 'unit-test'}});
   gulp.src('**/*spec.js', {read: false})
     .pipe(gulpMocha({reporter: 'nyan'}));
 });
